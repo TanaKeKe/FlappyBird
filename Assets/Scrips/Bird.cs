@@ -7,7 +7,9 @@ using UnityEngine.UI;
 public class Bird : MonoBehaviour
 {
     private Rigidbody2D rigidbody; // check vật lý
-
+    private SpriteRenderer spriteRenderer; // animation cho chim
+    public Sprite[] sprites;
+    private int spriteIndex;
     #region Hiển thị điểm
     private int score;
     public Text scoreText;
@@ -36,6 +38,7 @@ public class Bird : MonoBehaviour
     {
         #region khởi tạo 
         check = false;
+        spriteRenderer = this.gameObject.GetComponent<SpriteRenderer>();
         rigidbody = this.gameObject.GetComponent<Rigidbody2D>();
         gameStart = false;
         rigidbody.gravityScale = 0;
@@ -58,6 +61,10 @@ public class Bird : MonoBehaviour
 
     }
 
+    private void Start()
+    {
+        InvokeRepeating(nameof(BirdFlying), 0.15f, 0.15f);
+    }
     // Update is called once per frame
     void Update()
     {
@@ -159,5 +166,14 @@ public class Bird : MonoBehaviour
     private int LoadHightScore()
     {
         return PlayerPrefs.GetInt("HightScore", best);
+    }
+
+    private void BirdFlying()
+    {
+        spriteIndex++;
+        if (spriteIndex >= sprites.Length) { spriteIndex = 0;}
+
+        spriteRenderer.sprite = sprites[spriteIndex];
+
     }
 }
